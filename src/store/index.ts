@@ -1,3 +1,2 @@
 // Zustand stores barrel file
-
-export {};
+export { useAppStore } from './appStore';

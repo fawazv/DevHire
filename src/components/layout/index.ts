@@ -1,3 +1,6 @@
 // Layout components barrel file
-
-export {};
+export { Sidebar } from './Sidebar';
+export type { NavItem } from './Sidebar';
+export { TopBar } from './TopBar';
+export { MobileNav } from './MobileNav';
+export { PageWrapper } from './PageWrapper';
