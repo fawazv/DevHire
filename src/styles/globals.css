@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Syne:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #080C14;
+    --bg-surface: #0E1420;
+    --bg-elevated: #141B2D;
+    
+    --border: #1E2A3D;
+    --border-active: #2E4A7D;
+    
+    --accent: #4F8EF7;
+    --accent-glow: rgba(79, 142, 247, 0.15);
+    --accent-gemini: #8AB4F8;
+    
+    --accent-success: #10B981;
+    --accent-warning: #F59E0B;
+    --accent-danger: #EF4444;
+    
+    --text-primary: #F1F5F9;
+    --text-secondary: #64748B;
+    --text-accent: #4F8EF7;
+  }
+
+  body {
+    @apply bg-primary text-text font-body antialiased selection:bg-accent selection:text-primary;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-text;
+  }
+
+  code, pre {
+    @apply font-mono;
+  }
+
+  /* Custom Scrollbar for a premium feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full hover:bg-border-active transition-colors;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-surface/80 backdrop-blur-md border border-border shadow-lg;
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 20px var(--accent-glow);
+  }
+}
