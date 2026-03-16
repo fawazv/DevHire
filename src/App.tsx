@@ -9,6 +9,7 @@ import { MobileNav } from '@/components/layout/MobileNav';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { ToastContainer } from '@/components/ui/Toast';
 import { SkeletonCard } from '@/components/ui/Skeleton';
+import { ApiKeyManager } from '@/components/features/ApiKeyManager';
 import { useAppStore } from '@/store/appStore';
 import { useToast } from '@/hooks/useToast';
 
@@ -119,6 +120,9 @@ export default function App() {
 
         {/* ── Toast Notifications ── */}
         <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
+        {/* ── Global Modals ── */}
+        <ApiKeyManager />
       </div>
     </QueryClientProvider>
   );

@@ -1,3 +1,2 @@
 // Feature compound components barrel file
-
-export {};
+export { ApiKeyManager } from './ApiKeyManager';
