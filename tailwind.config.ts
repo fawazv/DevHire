@@ -25,6 +25,20 @@ const config: Config = {
         body: ['Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
+      keyframes: {
+        'gemini-gradient': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(200%)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+      },
+      animation: {
+        'gemini-gradient': 'gemini-gradient 1.4s ease-in-out infinite',
+        shimmer: 'shimmer 2s linear infinite',
+      },
     },
   },
   plugins: [],
