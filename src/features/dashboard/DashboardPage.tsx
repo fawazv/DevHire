@@ -145,7 +145,7 @@ export function DashboardPage() {
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 text-accent text-sm font-medium font-body">
           <Zap size={14} />
-          <span>Powered by Gemini 2.0 Flash</span>
+          <span>Powered by Gemini 1.5 Flash</span>
         </div>
         <h1 className="text-3xl font-display font-bold text-text">
           Your Job Hunt,{' '}

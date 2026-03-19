@@ -137,10 +137,11 @@ export function ApiKeyManager() {
 
               {/* Body */}
               <div className="p-5 flex flex-col gap-6">
-                <p className="text-sm text-text-secondary font-body leading-relaxed">
-                  DevHire Intelligence uses the <strong className="text-text">Gemini 2.0 Flash</strong> model.
-                  Your key is securely stored in <code>sessionStorage</code> and is cleared automatically when you close the tab. It never touches our backend.
-                </p>
+                <p className="font-body text-sm text-text-secondary leading-relaxed">
+            DevHire Intelligence uses the Gemini 1.5 Flash model. Your key is securely stored in{' '}
+            <code className="bg-elevated px-1 py-0.5 rounded text-accent text-xs">sessionStorage</code>
+            {' '}and is cleared automatically when you close the tab. It never touches our backend.
+          </p>
 
                 {/* State: Key is already set */}
                 {hasApiKey && storedMaskedKey ? (
