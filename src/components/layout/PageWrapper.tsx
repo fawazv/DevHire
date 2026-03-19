@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
 
 // ─────────────────────────────────────────
 // Page transition variants
@@ -32,11 +31,8 @@ interface PageWrapperProps {
 // ─────────────────────────────────────────
 
 export function PageWrapper({ children }: PageWrapperProps) {
-  const location = useLocation();
-
   return (
     <motion.div
-      key={location.pathname}
       variants={pageVariants}
       initial="initial"
       animate="animate"

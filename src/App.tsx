@@ -119,32 +119,36 @@ export default function App() {
           <TopBar />
 
           <AnimatePresence mode="wait">
-            <PageWrapper key={location.pathname}>
-              <Suspense fallback={<PageSkeleton />}>
-                <Routes location={location}>
-                  {ROUTES.map(({ path, element, name }) => (
-                    <Route
-                      key={path}
-                      path={path}
-                      element={
+            <Routes location={location} key={location.pathname}>
+              {ROUTES.map(({ path, element, name }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    <PageWrapper>
+                      <Suspense fallback={<PageSkeleton />}>
                         <ErrorBoundary featureName={name}>
                           {element}
                         </ErrorBoundary>
-                      }
-                    />
-                  ))}
-                  {/* 404 catch-all */}
-                  <Route
-                    path="*"
-                    element={
+                      </Suspense>
+                    </PageWrapper>
+                  }
+                />
+              ))}
+              {/* 404 catch-all */}
+              <Route
+                path="*"
+                element={
+                  <PageWrapper>
+                    <Suspense fallback={<PageSkeleton />}>
                       <ErrorBoundary featureName="Page">
                         <NotFoundPage />
                       </ErrorBoundary>
-                    }
-                  />
-                </Routes>
-              </Suspense>
-            </PageWrapper>
+                    </Suspense>
+                  </PageWrapper>
+                }
+              />
+            </Routes>
           </AnimatePresence>
         </div>
 
