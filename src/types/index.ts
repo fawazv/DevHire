@@ -21,6 +21,24 @@ export type ResumeImprovement = z.infer<typeof ResumeImprovementSchema>;
 export type ResumeAnalysisResult = z.infer<typeof ResumeAnalysisResultSchema>;
 
 // ─────────────────────────────────────────
+// Salary & Role Intelligence Types & Schemas
+// ─────────────────────────────────────────
+
+export const SalaryResultSchema = z.object({
+  salaryMin: z.number(),
+  salaryMid: z.number(),
+  salaryMax: z.number(),
+  currency: z.string(),
+  currencySymbol: z.string(),
+  remoteFriendly: z.number().min(0).max(100),
+  topCompanies: z.array(z.string()).max(5),
+  topSkills: z.array(z.string()).max(3),
+  marketInsight: z.string(),
+});
+
+export type SalaryResult = z.infer<typeof SalaryResultSchema>;
+
+// ─────────────────────────────────────────
 // Global Common Types
 // ─────────────────────────────────────────
 

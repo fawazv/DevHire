@@ -74,3 +74,52 @@ The JSON must exactly match this schema:
   "summary": "brief 1-2 sentence overall assessment"
 }`;
 }
+
+// ─────────────────────────────────────────
+// Feature 2: Salary & Role Intelligence
+// ─────────────────────────────────────────
+
+export interface SalaryPromptParams {
+  roleLevel: string;
+  techStack: string[];
+  country: string;
+}
+
+/**
+ * Builds the Salary & Role Intelligence prompt.
+ * Enforces strict JSON output. All user inputs are sanitized.
+ */
+export function buildSalaryPrompt({ roleLevel, techStack, country }: SalaryPromptParams): string {
+  const safeRole = sanitizeInput(roleLevel, 100);
+  const safeStack = techStack.map((t) => sanitizeInput(t, 50)).join(', ');
+  const safeCountry = sanitizeInput(country, 100);
+
+  return `You are a global compensation data expert with real-time knowledge of tech hiring markets. Provide accurate, current salary intelligence for a software developer role.
+
+ROLE_QUERY_START
+Role Level: ${safeRole}
+Tech Stack: ${safeStack}
+Target Country/Region: ${safeCountry}
+ROLE_QUERY_END
+
+Based on this combination, provide:
+1. Annual salary range (min, mid, max) in local currency. For the US use USD, UK use GBP, India use INR (in Lakhs per annum), EU countries use EUR, etc.
+2. Remote-friendliness score (0-100): how likely this role+stack combination is to be remote-friendly globally
+3. Top 5 companies actively hiring for this role+stack combination in the specified country/region
+4. Top 3 additional skills that would significantly boost salary for this profile (be specific, not generic)
+5. A 2-3 sentence market insight summarizing demand, trends, or advice for breaking in
+
+IMPORTANT: Respond ONLY with valid JSON. No markdown, no backticks.
+The JSON must exactly match this schema:
+{
+  "salaryMin": number,
+  "salaryMid": number,
+  "salaryMax": number,
+  "currency": "string (e.g. USD, GBP, INR, EUR)",
+  "currencySymbol": "string (e.g. $, £, ₹, €)",
+  "remoteFriendly": number (0-100),
+  "topCompanies": ["company1", "company2", "company3", "company4", "company5"],
+  "topSkills": ["skill1", "skill2", "skill3"],
+  "marketInsight": "2-3 sentence market overview"
+}`;
+}
