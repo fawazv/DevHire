@@ -171,3 +171,62 @@ The JSON must exactly match this schema:
   "toneAnalysis": "1 sentence explaining the chosen tone"
 }`;
 }
+
+// ─────────────────────────────────────────
+// Feature 4: Interview Prep Coach
+// ─────────────────────────────────────────
+
+export type InterviewStage = 'Phone Screen' | 'Technical Round' | 'System Design' | 'Behavioral' | 'Final Round';
+
+export interface InterviewPromptParams {
+  techStack: string[];
+  stage: InterviewStage;
+  experienceYears: number;
+  previousQuestions?: string[];
+}
+
+/**
+ * Builds the Interview Prep Coach prompt.
+ * previousQuestions is used to avoid repeating the same questions across "Generate 5 More" calls.
+ */
+export function buildInterviewPrompt({ techStack, stage, experienceYears, previousQuestions = [] }: InterviewPromptParams): string {
+  const safeStack = techStack.map((t) => sanitizeInput(t, 50)).join(', ');
+  const avoidSection = previousQuestions.length > 0
+    ? `\nAVOID repeating these questions already asked:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n`
+    : '';
+
+  return `You are a senior FAANG engineer and technical interviewer with 12 years of experience. Generate 5 targeted interview questions for the following candidate profile.
+
+CANDIDATE_PROFILE_START
+Tech Stack: ${safeStack}
+Interview Stage: ${stage}
+Experience Level: ${experienceYears} year${experienceYears !== 1 ? 's' : ''} of experience
+CANDIDATE_PROFILE_END
+${avoidSection}
+For each question provide:
+1. The interview question (realistic, specific to the stack and stage)
+2. A model answer (comprehensive, what GREAT answers include, 3-5 sentences)
+3. What the interviewer is actually testing (1 sentence, be honest and specific)
+4. A natural follow-up question the interviewer would ask next
+5. Difficulty: Easy, Medium, or Hard (appropriate to the experience level)
+
+Calibration:
+- Phone Screen: fundamentals, basics, can they code
+- Technical Round: data structures, algorithms, system thinking
+- System Design: scalability, trade-offs, architecture decisions  
+- Behavioral: STAR method, leadership, conflict resolution
+- Final Round: culture fit, vision, senior judgment
+
+IMPORTANT: Respond ONLY with valid JSON. No markdown, no backticks.
+{
+  "questions": [
+    {
+      "question": "string",
+      "answer": "string",
+      "insight": "string (what they're testing)",
+      "followUp": "string",
+      "difficulty": "Easy" | "Medium" | "Hard"
+    }
+  ]
+}`;
+}

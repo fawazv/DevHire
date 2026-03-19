@@ -53,6 +53,25 @@ export const OutreachResultSchema = z.object({
 export type OutreachResult = z.infer<typeof OutreachResultSchema>;
 
 // ─────────────────────────────────────────
+// Interview Prep Coach Types & Schemas
+// ─────────────────────────────────────────
+
+export const InterviewQuestionSchema = z.object({
+  question: z.string(),
+  answer: z.string(),
+  insight: z.string(),
+  followUp: z.string(),
+  difficulty: z.enum(['Easy', 'Medium', 'Hard']),
+});
+
+export const InterviewResultSchema = z.object({
+  questions: z.array(InterviewQuestionSchema).min(1).max(5),
+});
+
+export type InterviewQuestion = z.infer<typeof InterviewQuestionSchema>;
+export type InterviewResult = z.infer<typeof InterviewResultSchema>;
+
+// ─────────────────────────────────────────
 // Global Common Types
 // ─────────────────────────────────────────
 
