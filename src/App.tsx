@@ -10,6 +10,7 @@ import { PageWrapper } from '@/components/layout/PageWrapper';
 import { ToastContainer } from '@/components/ui/Toast';
 import { SkeletonCard } from '@/components/ui/Skeleton';
 import { ApiKeyManager } from '@/components/features/ApiKeyManager';
+import { ErrorBoundary } from '@/components/features/ErrorBoundary';
 import { useAppStore } from '@/store/appStore';
 import { useToast } from '@/hooks/useToast';
 
@@ -47,6 +48,11 @@ const TrackerPage = lazy(() =>
     default: m.TrackerPage,
   })),
 );
+const NotFoundPage = lazy(() =>
+  import('@/features/NotFoundPage').then((m) => ({
+    default: m.NotFoundPage,
+  })),
+);
 
 // ─────────────────────────────────────────
 // React Query client
@@ -76,6 +82,19 @@ function PageSkeleton() {
 }
 
 // ─────────────────────────────────────────
+// Typed route config for ErrorBoundary names
+// ─────────────────────────────────────────
+
+const ROUTES = [
+  { path: '/',          element: <DashboardPage />,  name: 'Dashboard' },
+  { path: '/resume',    element: <ResumePage />,      name: 'Resume Intelligence' },
+  { path: '/salary',    element: <SalaryPage />,      name: 'Salary Intelligence' },
+  { path: '/outreach',  element: <OutreachPage />,    name: 'Cold Outreach' },
+  { path: '/interview', element: <InterviewPage />,   name: 'Interview Prep' },
+  { path: '/tracker',   element: <TrackerPage />,     name: 'Job Tracker' },
+] as const;
+
+// ─────────────────────────────────────────
 // App Shell
 // ─────────────────────────────────────────
 
@@ -103,12 +122,26 @@ export default function App() {
             <PageWrapper key={location.pathname}>
               <Suspense fallback={<PageSkeleton />}>
                 <Routes location={location}>
-                  <Route path="/" element={<DashboardPage />} />
-                  <Route path="/resume" element={<ResumePage />} />
-                  <Route path="/salary" element={<SalaryPage />} />
-                  <Route path="/outreach" element={<OutreachPage />} />
-                  <Route path="/interview" element={<InterviewPage />} />
-                  <Route path="/tracker" element={<TrackerPage />} />
+                  {ROUTES.map(({ path, element, name }) => (
+                    <Route
+                      key={path}
+                      path={path}
+                      element={
+                        <ErrorBoundary featureName={name}>
+                          {element}
+                        </ErrorBoundary>
+                      }
+                    />
+                  ))}
+                  {/* 404 catch-all */}
+                  <Route
+                    path="*"
+                    element={
+                      <ErrorBoundary featureName="Page">
+                        <NotFoundPage />
+                      </ErrorBoundary>
+                    }
+                  />
                 </Routes>
               </Suspense>
             </PageWrapper>

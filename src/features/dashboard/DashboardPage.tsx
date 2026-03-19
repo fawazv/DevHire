@@ -6,12 +6,18 @@ import {
   MessageSquare,
   Kanban,
   ArrowRight,
+  CheckCircle2,
+  Clock,
+  Trophy,
+  LayoutDashboard,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAppStore } from '@/store/appStore';
+import { useTrackerStore } from '@/store/trackerStore';
+import { cn } from '@/utils/cn';
 
 // ─────────────────────────────────────────
 // Feature card data
@@ -71,6 +77,62 @@ const itemVariants = {
 };
 
 // ─────────────────────────────────────────
+// Live Tracker Stats Strip
+// ─────────────────────────────────────────
+
+function TrackerStatsStrip() {
+  const cards = useTrackerStore((s) => s.cards);
+
+  const total = cards.length;
+  const applied = cards.filter((c) => c.column === 'Applied').length;
+  const interviewing = cards.filter((c) => c.column === 'Interviewing').length;
+  const offers = cards.filter((c) => c.column === 'Offer').length;
+  const highPriority = cards.filter((c) => c.priority === 'High' && c.column !== 'Rejected' && c.column !== 'Offer').length;
+
+  if (total === 0) return null;
+
+  const stats = [
+    { icon: <LayoutDashboard size={14} />, label: 'Tracked', value: total, color: 'text-text-secondary' },
+    { icon: <Clock size={14} />, label: 'Applied', value: applied, color: 'text-accent' },
+    { icon: <CheckCircle2 size={14} />, label: 'Interviewing', value: interviewing, color: 'text-accent-warning' },
+    { icon: <Trophy size={14} />, label: 'Offers', value: offers, color: 'text-accent-success' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
+      className="rounded-xl border border-border bg-surface p-4"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <span className="font-body text-xs font-semibold text-text-secondary uppercase tracking-wider">
+          Job Hunt Progress
+        </span>
+        <Link to="/tracker" className="font-body text-xs text-accent hover:underline flex items-center gap-1">
+          Open Tracker <ArrowRight size={11} />
+        </Link>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        {stats.map((s) => (
+          <div key={s.label} className="flex flex-col items-center gap-1 rounded-lg bg-elevated border border-border p-3">
+            <span className={cn('font-display text-xl font-bold', s.color)}>{s.value}</span>
+            <div className={cn('flex items-center gap-1 font-body text-[10px] text-text-secondary', s.color)}>
+              {s.icon} {s.label}
+            </div>
+          </div>
+        ))}
+      </div>
+      {highPriority > 0 && (
+        <p className="mt-2 font-body text-xs text-accent-warning text-center">
+          ⚡ {highPriority} high-priority application{highPriority > 1 ? 's' : ''} need attention
+        </p>
+      )}
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────
 // Dashboard Page
 // ─────────────────────────────────────────
 
@@ -78,7 +140,7 @@ export function DashboardPage() {
   const { hasApiKey, setApiKeyModalOpen } = useAppStore();
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-7">
       {/* Hero */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 text-accent text-sm font-medium font-body">
@@ -97,9 +159,9 @@ export function DashboardPage() {
         </p>
 
         {!hasApiKey && (
-          <div className="flex items-center gap-3 mt-2 rounded-xl border border-accent-warning/30 bg-accent-warning/5 p-4">
+          <div className="flex items-center gap-3 mt-1 rounded-xl border border-accent-warning/30 bg-accent-warning/5 p-4">
             <div className="flex-1 text-sm text-accent-warning font-body">
-              Add your Gemini API key to unlock all AI features — it's free.
+              Add your Gemini API key to unlock all AI features — it's free at ai.google.dev.
             </div>
             <Button
               variant="ghost"
@@ -112,6 +174,9 @@ export function DashboardPage() {
           </div>
         )}
       </div>
+
+      {/* Live tracker stats (only if cards exist) */}
+      <TrackerStatsStrip />
 
       {/* Feature Cards Grid */}
       <motion.div
