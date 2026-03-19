@@ -72,6 +72,34 @@ export type InterviewQuestion = z.infer<typeof InterviewQuestionSchema>;
 export type InterviewResult = z.infer<typeof InterviewResultSchema>;
 
 // ─────────────────────────────────────────
+// Job Hunt Tracker Types & Schemas
+// ─────────────────────────────────────────
+
+export const KANBAN_COLUMNS = ['Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'] as const;
+export type KanbanColumn = (typeof KANBAN_COLUMNS)[number];
+export type Priority = 'High' | 'Medium' | 'Low';
+
+export const JobCardSchema = z.object({
+  id: z.string(),
+  company: z.string().min(1),
+  role: z.string().min(1),
+  salaryRange: z.string().optional(),
+  link: z.string().optional(),
+  notes: z.string().optional(),
+  nextAction: z.string().optional(),
+  priority: z.enum(['High', 'Medium', 'Low']),
+  column: z.enum(['Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected']),
+  dateAdded: z.string(), // ISO date string
+});
+
+export const TrackerStateSchema = z.object({
+  cards: z.array(JobCardSchema),
+});
+
+export type JobCard = z.infer<typeof JobCardSchema>;
+export type TrackerState = z.infer<typeof TrackerStateSchema>;
+
+// ─────────────────────────────────────────
 // Global Common Types
 // ─────────────────────────────────────────
 
