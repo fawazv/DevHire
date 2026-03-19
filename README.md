@@ -2,7 +2,7 @@
 
 > **An AI-powered job application co-pilot for self-taught developers breaking into the global tech market.**
 
-Built with **React 18 + TypeScript 5 + Gemini 2.0 Flash** — a flagship portfolio project demonstrating senior-level engineering: clean architecture, security-first design, streaming AI integrations, and world-class UI/UX.
+Built with **React 18 + TypeScript 5 + Gemini 2.5 Flash** — a flagship portfolio project demonstrating senior-level engineering: clean architecture, security-first design, streaming AI integrations, and world-class UI/UX.
 
 ---
 
