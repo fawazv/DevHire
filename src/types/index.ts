@@ -39,6 +39,20 @@ export const SalaryResultSchema = z.object({
 export type SalaryResult = z.infer<typeof SalaryResultSchema>;
 
 // ─────────────────────────────────────────
+// Cold Outreach Generator Types & Schemas
+// ─────────────────────────────────────────
+
+export const OutreachResultSchema = z.object({
+  emailSubject: z.string(),
+  emailBody: z.string(),
+  linkedinDM: z.string(),
+  toneAnalysis: z.string(),
+  toneLabel: z.enum(['Professional', 'Warm', 'Bold', 'Concise', 'Story-driven']),
+});
+
+export type OutreachResult = z.infer<typeof OutreachResultSchema>;
+
+// ─────────────────────────────────────────
 // Global Common Types
 // ─────────────────────────────────────────
 

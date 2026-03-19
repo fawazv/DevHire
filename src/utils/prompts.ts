@@ -123,3 +123,51 @@ The JSON must exactly match this schema:
   "marketInsight": "2-3 sentence market overview"
 }`;
 }
+
+// ─────────────────────────────────────────
+// Feature 3: Cold Outreach Generator
+// ─────────────────────────────────────────
+
+export interface OutreachPromptParams {
+  companyName: string;
+  roleTitle: string;
+  managerType: 'CTO' | 'Engineering Manager' | 'HR / Recruiter';
+  background: string;
+}
+
+/**
+ * Builds the Cold Outreach Generator prompt.
+ * Returns structured JSON with email + LinkedIn DM variants and tone analysis.
+ */
+export function buildOutreachPrompt({ companyName, roleTitle, managerType, background }: OutreachPromptParams): string {
+  const safeCo = sanitizeInput(companyName, 100);
+  const safeRole = sanitizeInput(roleTitle, 100);
+  const safeBg = sanitizeInput(background, 600);
+
+  return `You are a world-class tech career coach who specializes in cold outreach for self-taught developers breaking into competitive companies. Your goal is to write hyper-personalized, authentic, and compelling outreach messages.
+
+OUTREACH_CONTEXT_START
+Company: ${safeCo}
+Target Role: ${safeRole}
+Recipient Type: ${managerType}
+Candidate Background: ${safeBg}
+OUTREACH_CONTEXT_END
+
+Generate two outreach variants:
+1. EMAIL: A cold email with a punchy subject line. Should be concise (under 200 words), personal, lead with value, mention something specific about the company, and end with a soft CTA. Do NOT use clichés like "I hope this email finds you well."
+2. LINKEDIN DM: A shorter, more conversational version (under 100 words). Casual but professional, no formal salutation.
+
+Also provide:
+3. A tone label — pick exactly one from: Professional, Warm, Bold, Concise, Story-driven
+4. A 1-sentence tone analysis explaining WHY that tone works for this ${managerType} at ${safeCo}
+
+IMPORTANT: Respond ONLY with valid JSON. No markdown, no backticks.
+The JSON must exactly match this schema:
+{
+  "emailSubject": "the email subject line",
+  "emailBody": "full email body without subject",
+  "linkedinDM": "linkedin direct message text",
+  "toneLabel": "one of: Professional | Warm | Bold | Concise | Story-driven",
+  "toneAnalysis": "1 sentence explaining the chosen tone"
+}`;
+}
